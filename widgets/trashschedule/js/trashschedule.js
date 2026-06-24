@@ -166,7 +166,7 @@ $.extend(true, systemDictionary, {
 });
 
 vis.binds['trashschedule'] = {
-    version: '5.3.0',
+    version: '5.3.1',
     showVersion: function () {
         if (vis.binds['trashschedule'].version) {
             console.log(`Version trashschedule: ${vis.binds['trashschedule'].version}`);
@@ -198,37 +198,45 @@ vis.binds['trashschedule'] = {
             dateOptions.weekday = dateWeekday;
         }
 
-        // update based on current value
-        vis.binds['trashschedule'].redraw(
-            $div.find('.trashtypes'),
-            vis.states[`${oid}.val`],
-            size,
-            limit,
-            glow,
-            glowLimit,
-            showName,
-            showDate,
-            dateLocale,
-            dateOptions,
-        );
+        const $target = $div.find('.trashtypes');
 
-        // subscribe on updates of value
+        const doRedraw = function (val) {
+            vis.binds['trashschedule'].redraw(
+                $target,
+                val,
+                size,
+                limit,
+                glow,
+                glowLimit,
+                showName,
+                showDate,
+                dateLocale,
+                dateOptions,
+            );
+        };
+
+        // subscribe on updates of value (live changes)
         if (oid) {
             vis.states.bind(`${oid}.val`, function (e, newVal, oldVal) {
-                vis.binds['trashschedule'].redraw(
-                    $div.find('.trashtypes'),
-                    newVal,
-                    size,
-                    limit,
-                    glow,
-                    glowLimit,
-                    showName,
-                    showDate,
-                    dateLocale,
-                    dateOptions,
-                );
+                doRedraw(newVal);
             });
         }
+
+        // Initial render: in vis-2 (and especially slower webviews like Fully Kiosk
+        // on Fire TV) the state value is often not available yet when the widget is
+        // first created. A single fixed delay is unreliable across devices, so poll
+        // until the value is present instead, then draw once. Fixes #193.
+        let initAttempts = 0;
+        const initialRender = function () {
+            const val = vis.states[`${oid}.val`];
+            if (val !== undefined && val !== null && val !== '') {
+                doRedraw(val);
+            } else if (initAttempts++ < 150) {
+                // retry for up to ~30s (150 * 200ms)
+                setTimeout(initialRender, 200);
+            }
+        };
+        initialRender();
     },
     toPaddedHexString: function (num, len) {
         let str = num.toString(16);
@@ -395,7 +403,14 @@ vis.binds['trashschedule'] = {
         });
     },
     redraw: function (target, json, size, limit, glow, glowLimit, showName, showDate, dateLocale, dateOptions) {
-        if (json) {
+        var trashTypes;
+        try {
+            trashTypes = json ? JSON.parse(json) : null;
+        } catch (err) {
+            trashTypes = null;
+        }
+
+        if (Array.isArray(trashTypes)) {
             target.empty();
             var rendered = 0;
 
@@ -403,7 +418,7 @@ vis.binds['trashschedule'] = {
                 target.css('transform', `scale(${size / 100})`);
             }
 
-            $.each(JSON.parse(json), function (i, trashType) {
+            $.each(trashTypes, function (i, trashType) {
                 if (!trashType._completed) {
                     if (limit === 0 || rendered < limit) {
                         var newItem = $('<div class="trashtype"></div>');

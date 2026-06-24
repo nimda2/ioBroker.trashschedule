@@ -1,13 +1,17 @@
 {
   "common": {
     "name": "trashschedule",
-    "version": "5.3.0",
+    "version": "5.3.1",
     "blockedVersions": [
       "3.0.0",
       "3.1.0",
       "3.1.1"
     ],
     "news": {
+      "5.3.1": {
+        "en": "Fixed VIS-2 widget not rendering on first page load, especially in slower webviews like Fully Kiosk on Fire TV (#193)",
+        "de": "VIS-2-Widget wurde beim ersten Laden der Seite nicht angezeigt, besonders in langsameren Webviews wie Fully Kiosk auf Fire TV (#193) - behoben"
+      },
       "5.3.0": {
         "en": "Fixed filtering of Lobbe.app address selections in the admin UI\nAdded Lobbe.app as a new data source\nAdded German labels for the Lobbe address selection",
         "de": "Behobene Filterung von Lobbe.app Adressenauswahlen im Admin UI\nLobbe.app als neue Datenquelle hinzugefügt\nDeutsche Labels für die Lobbe Adressenauswahl hinzugefügt",
