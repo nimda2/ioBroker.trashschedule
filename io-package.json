@@ -1,13 +1,17 @@
 {
   "common": {
     "name": "trashschedule",
-    "version": "5.3.1",
+    "version": "5.3.2",
     "blockedVersions": [
       "3.0.0",
       "3.1.0",
       "3.1.1"
     ],
     "news": {
+      "5.3.2": {
+        "en": "Widget: keep all trash bins on a single row when the widget is made narrower (no more wrapping); the size option now shrinks the row from the left",
+        "de": "Widget: Alle Mülltonnen bleiben in einer Zeile, wenn das Widget schmaler gemacht wird (kein Umbruch mehr); der Größe-Regler verkleinert die Reihe jetzt von links"
+      },
       "5.3.1": {
         "en": "Fixed VIS-2 widget not rendering on first page load, especially in slower webviews like Fully Kiosk on Fire TV (#193)",
         "de": "VIS-2-Widget wurde beim ersten Laden der Seite nicht angezeigt, besonders in langsameren Webviews wie Fully Kiosk auf Fire TV (#193) - behoben"

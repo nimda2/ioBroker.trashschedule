@@ -1,6 +1,14 @@
+.trashtypes {
+    /* Tonnen immer in einer Zeile halten (kein Umbruch, wenn das Widget schmaler wird) */
+    white-space: nowrap;
+    /* Größe-Regler (size) schrumpft die Reihe von links statt aus der Mitte */
+    transform-origin: top left;
+}
+
 .trashtype {
     position: relative;
     display: inline-block;
+    vertical-align: top;
     width: 115px;
     margin-left: 20px;
     margin-top: 20px;
