@@ -1,7 +1,7 @@
 <!--
     ioBroker.vis TrashSchedule Widget-Set
 
-    Version: '5.3.2'
+    Version: '5.3.3'
 
     Copyright 2024 Matthias Kleine info@haus-automatisierung.com
 -->
@@ -16,7 +16,21 @@
         data-vis-set="trashschedule"
         data-vis-name="TrashSchedule">
     <div class="vis-widget trashschedule-widget <%== this.data.attr('class') %>" style="overflow: visible; width: 575px; height: 275px;" id="<%= this.data.attr('wid') %>">
-        <% vis.binds.trashschedule.createWidget(this.data.wid, this.view, this.data, this.style); %>
+        <%
+            // In vis-2 the template can be evaluated before js/trashschedule.js
+            // has finished loading (vis.binds.trashschedule is still undefined),
+            // which crashed the whole render ("can't render tplTrashscheduleHelper").
+            // Retry until the widget script is available (#193 follow-up).
+            (function initTrashWidget(wid, view, data, style, attempts) {
+                if (window.vis && vis.binds && vis.binds.trashschedule) {
+                    vis.binds.trashschedule.createWidget(wid, view, data, style);
+                } else if (attempts < 150) {
+                    setTimeout(function () {
+                        initTrashWidget(wid, view, data, style, attempts + 1);
+                    }, 200);
+                }
+            })(this.data.wid, this.view, this.data, this.style, 0);
+        %>
         <div class="trashtypes"></div>
     </div>
 </script>
