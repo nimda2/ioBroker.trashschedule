@@ -1,13 +1,17 @@
 {
   "common": {
     "name": "trashschedule",
-    "version": "5.3.3",
+    "version": "5.3.4",
     "blockedVersions": [
       "3.0.0",
       "3.1.0",
       "3.1.1"
     ],
     "news": {
+      "5.3.4": {
+        "en": "remove Sentry telemetry plugin (private fork: no error reporting to the upstream project)",
+        "de": "Sentry-Telemetrie-Plugin entfernt (privater Fork: keine Fehlerberichte an das Upstream-Projekt)"
+      },
       "5.3.3": {
         "en": "Widget: guard against vis-2 loading race - the template no longer crashes when it renders before the widget script is loaded (fixes \"can't render tplTrashscheduleHelper\" log errors)",
         "de": "Widget: Absicherung gegen Lade-Race in vis-2 - das Template stürzt nicht mehr ab, wenn es vor dem Widget-Skript gerendert wird (behebt \"can't render tplTrashscheduleHelper\"-Logfehler)"
@@ -197,12 +201,7 @@
       {
         "admin": ">=7.6.20"
       }
-    ],
-    "plugins": {
-      "sentry": {
-        "dsn": "https://ae5180dfac964a4d8d1c74657dd14281@sentry.iobroker.net/102"
-      }
-    }
+    ]
   },
   "native": {
     "source": "ical",
